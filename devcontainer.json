@@ -1,0 +1,34 @@
+{
+  "name": "scc365-mininet",
+  "image": "ghcr.io/scc365/devcontainer:latest",
+  "workspaceMount": "source=${localWorkspaceFolder}/,target=/workspace,type=bind,consistency=cached",
+  "workspaceFolder": "/workspace",
+  "postCreateCommand": "/scripts/start-ovs.sh",
+  "privileged": true,
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        // General Extensions
+        "naumovs.color-highlight",
+        "spikespaz.vscode-smoothtype",
+        "alefragnani.Bookmarks",
+        "oderwat.indent-rainbow",
+        "yzhang.markdown-all-in-one",
+        "eamodio.gitlens",
+        "mhutchie.git-graph",
+        "gruntfuggly.todo-tree",
+        "mohsen1.prettify-json",
+        "stkb.rewrap",
+        "shardulm94.trailing-spaces"
+        // TODO: Add python extensions
+      ],
+      "settings": {
+        // General Settings
+        "files.eol": "\n",
+        "files.autoSave": "onFocusChange",
+        "editor.formatOnSave": true,
+        "rewrap.wrappingColumn": 80
+      }
+    }
+  }
+}
