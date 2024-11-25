@@ -46,13 +46,25 @@ ARG MININET_REPO
 ARG MININET_VERSION
 ARG OSKEN_VERSION
 ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update && \
+    apt-get install -yqq \
+    gpg \
+    wget
+RUN mkdir -p /etc/apt/keyrings && \
+    wget -qO- https://raw.githubusercontent.com/eza-community/eza/main/deb.asc |  gpg --dearmor -o /etc/apt/keyrings/gierens.gpg && \
+    echo "deb [signed-by=/etc/apt/keyrings/gierens.gpg] http://deb.gierens.de stable main" | tee /etc/apt/sources.list.d/gierens.list && \
+    chmod 644 /etc/apt/keyrings/gierens.gpg /etc/apt/sources.list.d/gierens.list && \
+    apt-get update
 RUN apt-get update -q && \
     apt-get install --no-install-recommends -yqq \
     arping \
+    bat \
     curl \
+    eza \
     figlet \
     gcc \
     git \
+    gpg \
     g++ \
     hping3 \
     iperf3 \
