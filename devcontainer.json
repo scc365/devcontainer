@@ -20,7 +20,7 @@
         "mohsen1.prettify-json",
         "stkb.rewrap",
         "shardulm94.trailing-spaces",
-        // TODO: Add python extensions
+        // Python Extensions
         "ms-python.python",
         "ms-python.isort",
         "ms-python.autopep8"

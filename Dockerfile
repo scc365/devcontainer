@@ -63,6 +63,7 @@ RUN apt-get update -q && \
     libssl-dev \
     libxml2-dev \
     libxslt1-dev \
+    nano \
     net-tools \
     openvswitch-common \
     openvswitch-switch \
@@ -76,6 +77,7 @@ RUN apt-get update -q && \
     telnet \
     tshark \
     traceroute \
+    vim \
     zlib1g-dev && \
     rm -rf /var/lib/apt/lists/*
 COPY --from=openflow /usr/local/bin/ /usr/local/bin/
