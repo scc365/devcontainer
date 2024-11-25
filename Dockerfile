@@ -1,7 +1,7 @@
 ARG DEBIAN_VERSION=bookworm-slim
 ARG MININET_REPO=https://github.com/mininet/mininet
 ARG MININET_VERSION=2.3.0
-ARG RYU_VERSION=4.34
+ARG OSKEN_VERSION=2.11.2
 
 FROM debian:${DEBIAN_VERSION} AS openflow
 ARG MININET_REPO
@@ -44,12 +44,13 @@ RUN gcc -Wall -Wextra -DVERSION=\"\(${MNEXEC_VERSION}\)\" mnexec.c -o /output/mn
 FROM debian:${DEBIAN_VERSION}
 ARG MININET_REPO
 ARG MININET_VERSION
-ARG RYU_VERSION
+ARG OSKEN_VERSION
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update -q && \
     apt-get install --no-install-recommends -yqq \
     arping \
     curl \
+    figlet \
     gcc \
     git \
     g++ \
@@ -58,28 +59,35 @@ RUN apt-get update -q && \
     iproute2 \
     iptables \
     iputils-ping \
+    libffi-dev \
+    libssl-dev \
+    libxml2-dev \
+    libxslt1-dev \
     net-tools \
     openvswitch-common \
     openvswitch-switch \
     openvswitch-testcontroller \
     python3 \
     python3-bottle \
+    python3-dev \
     python3-flask \
     python3-pip \
     python3-setuptools \
     telnet \
     tshark \
-    traceroute && \
+    traceroute \
+    zlib1g-dev && \
     rm -rf /var/lib/apt/lists/*
-RUN pip install --break-system-packages eventlet==0.30.2 && \
-    pip install --break-system-packages setuptools==59.5.0
-RUN pip install --break-system-packages ryu==${RYU_VERSION}
 COPY --from=openflow /usr/local/bin/ /usr/local/bin/
 COPY --from=mnexec /output/mnexec /usr/bin/mnexec
+RUN pip install --break-system-packages --upgrade pip
 WORKDIR /src/mininet
 RUN git clone -b ${MININET_VERSION} ${MININET_REPO} .
 RUN pip3 install --break-system-packages .
-WORKDIR /
-COPY scripts/start-ovs.sh /scripts/start-ovs.sh
-RUN chmod +x /scripts/start-ovs.sh
+WORKDIR /src/osken
+RUN git clone -b ${OSKEN_VERSION} https://github.com/openstack/os-ken.git .
+RUN pip install --break-system-packages -r requirements.txt && \
+    python3 setup.py install
+COPY scripts/*.sh /scripts/
+RUN chmod +x /scripts/*.sh
 WORKDIR /workspace
